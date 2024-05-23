@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "esModuleInterop": true,
+    "types": [
+      "./types.d.ts"
+    ],
+    "removeComments": true,
+    "outDir": "./js_files"
+  },
+  "files": [
+    "./index.ts",
+    "./common.ts",
+    "./api_work.ts"
+  ],
+  "typeRoots": [
+    "./types",
+    "./node_modules/@types",
+    "./node_modules/@yandex/ymaps3-types"
+  ],
+  "paths": {
+    "ymaps3": [
+      "./node_modules/@yandex/ymaps3-types"
+    ]
+  }
+}
+  
+
+
+
+
+
+

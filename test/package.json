@@ -1,0 +1,25 @@
+{
+    "dependencies": {
+        "@supabase/supabase-js": "^2.42.7",
+        "@yandex/ymaps3-clusterer": "^0.0.8",
+        "@yandex/ymaps3-types": "^0.0.22",
+        "dotenv": "^16.4.5",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "ts-loader": "^9.5.1",
+        "vue": "3.3.4",
+        "webpack": "^5.91.0",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^5.0.4"
+    },
+    "devDependencies": {
+        "@types/react": "18.2.21",
+        "@types/react-dom": "18.2.7",
+        "html-webpack-plugin": "^5.6.0",
+        "typescript": "^5.2.2"
+    },
+    "scripts": {
+        "start": "npx http-server",
+        "build": "browserify ./js_files/index.js ./js_files/common.js ./js_files/api_work.js -o ./js_files/bundle.js"
+    }
+}

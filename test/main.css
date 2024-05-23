@@ -1,0 +1,306 @@
+/* html, body{ 
+width: 100%; 
+height: 100%; 
+margin: 0; 
+padding: 0; 
+font-family: Arial, Helvetica, sans-serif; 
+}  */
+
+
+body{
+    height: 100%;
+}
+
+html{
+display: flex;
+flex-direction: column;
+height: 100vh;
+}
+
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: "Montserrat", sans-serif;
+
+}
+
+
+
+main{
+    flex: 1 1 0;
+}
+
+#map{
+width: 100%; 
+height: 100%;
+}
+
+
+.wrapper{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.header{
+    /* background-color: #f5c669; */
+    background: rgb(203,62,0);
+    background: linear-gradient(90deg, rgb(160, 2, 2) 0%, rgb(255, 92, 92) 50%, rgb(249, 82, 82) 100%);
+    height: 80px;
+}
+
+.main{
+    background-color: rgb(250,247,240);
+    flex-grow: 1;
+}
+
+.footer{
+    /* background-color: #f5c669; */
+    background: rgb(203,62,0);
+    background: linear-gradient(90deg,  rgb(249, 82, 82) 0%, rgb(255, 92, 92) 50%, rgb(160, 2, 2) 100%);
+    height: 70px;
+}
+
+
+
+.title{
+    font-size: 25px;
+    font-weight: 500;
+    color: #ffffff;
+    text-shadow: 2px 2px 2px #3e0101;
+    letter-spacing: 5px;
+    margin: 20px;
+    margin-left: 30px;
+}
+
+
+/* Стили для кастомного маркера */
+.marker {
+    /* position: relative; */
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 10px solid #fc0000;
+    background-color: #ffffff;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+}
+/* Cтили для окошка с заголовком новости */
+.hint{
+    position: absolute;
+    padding: 5px;
+    border-radius: 50;
+    width: 300px;
+    background-color: #ffffff;
+    opacity: 0.95;
+    transform: translate(10%, 1%);
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.373);
+    z-index: 1;
+    /* opacity: 0; 
+    transition: 1s; 
+    animation: show 1s;
+    animation-fill-mode: forwards;  */
+}
+.hint a{
+    font-size: 11px;
+    font-weight: 500;
+    color: #000000;
+    /* margin: 10px; */
+}
+
+/* @keyframes showHint{
+    0%{
+    opacity:0;
+    }
+    100% {
+    opacity:1;
+    }
+} */
+
+
+
+.vmmap-popup {
+    display: block;
+    position: absolute;
+    transform: translate(0px, -6%);
+    /* max-width: 336px; */
+    min-height: 1px;
+    background: #fff;
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,.15);
+    border-radius: 8px;
+    opacity: 0; /*Элемент полностью прозрачный (невидимый)*/
+    transition: 1s; /*Скорость перехода состояния элемента*/
+    animation: show 1s; /* Указываем название анимации, её время и количество повторов*/
+    animation-fill-mode: forwards; /* Чтобы элемент оставался в конечном состоянии анимации */
+    animation-delay: 0.15s; /* Задержка перед началом */
+}
+@keyframes show{
+    0%{
+    opacity:0;
+    }
+    100% {
+    opacity:1;
+    }
+}
+
+.vmmap-popup.hidden {
+    display: block;
+    position: absolute;
+    transform: translate(0px, -6%);
+    /* max-width: 336px; */
+    background: #fff;
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,.15);
+    border-radius: 8px;
+    opacity: 1;
+    animation: fadeOut 0.5s; /* Применяем анимацию появления и исчезновения */
+    animation-fill-mode: forwards;
+    overflow: hidden;
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1; /* Промежуточная прозрачность */
+    }
+    100% {
+        opacity: 0; /* Конечная прозрачность */
+    }
+}
+
+
+
+.vmmap-popup .popup-panel {
+    text-align: right;
+    /* background: #009deb; */
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 0;
+    padding: 12px 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.vmmap-popup .popup-panel a {
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.vmmap-popup .vmpopup-cover {
+    width: 100%;
+    max-width: 336px;
+}
+.vmmap-popup .vmpopup-cover a {
+    text-decoration: none;
+    outline: none;
+}
+.vmmap-popup .vmpopup-cover img {
+    width: 100%;
+    /* height: auto; */
+    max-height: 170px;
+    min-height: 170px;
+    border: 0;
+}
+
+.vmmap-popup h2 {
+    font-weight: 800;
+    font-size: 16px;
+    color: #111010;
+    letter-spacing: 0;
+    line-height: 20px;
+    padding: 16px;
+    width: 100%;
+}
+.vmmap-popup h2 a {
+    color: #111010;
+    transition: all .3s ease 0s;
+    text-decoration: none;
+}
+.vmmap-popup h2 a:hover {
+    color: #730101;
+    transition: all .3s ease 0s;
+    text-decoration: none;
+}
+
+.vmmap-popup .vmpopup-footer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px 16px;
+}
+.vmmap-popup .vmpopup-footer .time {
+    font-size: 13px;
+    color: #7e7e7e;
+    letter-spacing: 0;
+    text-align: right;
+    line-height: 20px;
+}
+
+.vmmap-popup .arrow {
+    position: absolute;
+    display: block;
+    width: 12px;
+    height: 12px;
+    background-image: url(/img/arrow.svg);
+    background-size: cover;
+    left: 50%;
+    margin-left: -6px;
+    bottom: 0;
+    margin-bottom: -6px;
+}
+
+/* .close{
+    text-decoration: none;
+    display: inline-block;
+    padding: 1px 3px;
+    border-radius: 4px;
+    user-select: none;
+    font-size: 15px;
+} */
+
+
+.close {
+    font-weight: 300px;
+    overflow: hidden;
+    position: relative;
+    border: none;
+    padding: 0;
+    width: 2em; height: 2em;
+    border-radius: 50%;
+    background: transparent;
+    color: #ffffff;
+    font: inherit;
+    text-indent: 100%;
+    cursor: pointer;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.181);
+    }
+    
+    &:before, &:after {
+        position: absolute;
+        top: 15%; left: calc(50% - .0625em);
+        width: .125em; height: 70%;
+        border-radius: .125em;
+        transform: rotate(45deg);
+        background: currentcolor;
+        content: ''
+      }
+      
+      &:after { transform: rotate(-45deg); }
+}
+
+
+
+
+
+
+
+
+
