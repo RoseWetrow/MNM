@@ -6,7 +6,7 @@ import traceback
 
 
 # find_dotenv()
-load_dotenv(".env")
+load_dotenv("./MoscowNewsMap/.env")
 
 # config = dotenv_values(".env")
 # print(config['DB_URL'])

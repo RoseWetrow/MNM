@@ -5,8 +5,67 @@ import traceback
 
 
 
-load_dotenv(".env")
+load_dotenv("./MoscowNewsMap/.env")
 YANDEX_KEY = os.environ.get("YANDEX_KEY")
+
+
+# def searchAreaAndDistrict(Components):
+#     # # получение округа
+#     # area = Components[4]
+#     # # получение района
+#     # district = Components[5]
+
+#     area_distr = []
+
+#     if Components[4]['kind'] == 'district' and Components[5]['kind'] == 'district': # это округ и район
+#         # получение округа
+#         area = Components[4]['name']
+#         # получение района
+#         district = Components[5]['name']
+#         # удаление лишнего
+#         area =  area.split(' административный округ')[0]
+#         # удаление лишнего
+#         district = district.split('район')
+        
+#         # обрабокта случаев и удаление лишего
+#         if district[0] == '':   # район Название
+#             district = district[1]
+#             district = district.lstrip()
+#         elif district[0] != '': # Название район
+#             district = district[0]
+#             district = district.rstrip()
+
+#         print(area)
+#         print(district)
+        
+#         area_distr = [area, district]
+#     elif Components[3]['kind'] == 'area' and Components[4]['name'].startswith('поселение'): # это округ и поселениелоьо
+#         # получение округа
+#         area = Components[3]['name']
+#         # получение района
+#         district = Components[4]['name']
+#         # удаление лишнего
+#         area =  area.split(' административный округ')[0]
+#         # удаление лишнего
+#         district = district.split('поселение')
+        
+#         # обрабокта случаев и удаление лишего
+#         if district[0] == '':   # поселение Название
+#             district = district[1]
+#             district = district.lstrip()
+#         elif district[0] != '': # Название поселение
+#             district = district[0]
+#             district = district.rstrip()
+
+#         print(area)
+#         print(district)
+        
+#         area_distr = [area, district]
+#     else:
+#         area_distr = []
+        
+#     return area_distr                        
+
 
 def searchAreaAndDistrict(Components):
     # # получение округа
@@ -16,52 +75,61 @@ def searchAreaAndDistrict(Components):
 
     area_distr = []
 
-    if Components[4]['kind'] == 'district' and Components[5]['kind'] == 'district': # это округ и район
-        # получение округа
-        area = Components[4]['name']
-        # получение района
-        district = Components[5]['name']
-        # удаление лишнего
-        area =  area.split(' административный округ')[0]
-        # удаление лишнего
-        district = district.split('район')
-        
-        # обрабокта случаев и удаление лишего
-        if district[0] == '':   # район Название
-            district = district[1]
-            district = district.lstrip()
-        elif district[0] != '': # Название район
-            district = district[0]
-            district = district.rstrip()
+    if len(Components) == 6:
+        if Components[4]['kind'] == 'district' and Components[5]['kind'] == 'district': # это округ и район
+            # получение округа
+            area = Components[4]['name']
+            # получение района
+            district = Components[5]['name']
+            # удаление лишнего
+            area =  area.split(' административный округ')[0]
+            # удаление лишнего
+            district = district.split('район')
+            
+            # обрабокта случаев и удаление лишего
+            if district[0] == '':   # район Название
+                district = district[1]
+                district = district.lstrip()
+            elif district[0] != '': # Название район
+                district = district[0]
+                district = district.rstrip()
 
-        print(area)
-        print(district)
-        
-        area_distr = [area, district]
-    elif Components[3]['kind'] == 'area' and Components[4]['name'].startswith('поселение'): # это округ и поселениелоьо
-        # получение округа
-        area = Components[3]['name']
-        # получение района
-        district = Components[4]['name']
-        # удаление лишнего
-        area =  area.split(' административный округ')[0]
-        # удаление лишнего
-        district = district.split('поселение')
-        
-        # обрабокта случаев и удаление лишего
-        if district[0] == '':   # поселение Название
-            district = district[1]
-            district = district.lstrip()
-        elif district[0] != '': # Название поселение
-            district = district[0]
-            district = district.rstrip()
+            print(area)
+            print(district)
+            
+            area_distr = [area, district]
+        else:
+            area_distr = []
+    
+    elif len(Components) == 5: # далее обработка популярных случаев
 
-        print(area)
-        print(district)
-        
-        area_distr = [area, district]
-    else:
-        area_distr = []
+        if (Components[3]['kind'] == 'area' and Components[4]['name'].startswith('поселение')) or (Components[3]['kind'] == 'province' and Components[4]['name'].startswith('район')) or (Components[3]['kind'] == 'district' and Components[4]['name'].startswith('район')):
+            # получение округа
+            area = Components[3]['name']
+            # получение района/поселения
+            district = Components[4]['name']
+            
+            # удаление лишнего в названии округа
+            area = area.split(' административный округ')[0]
+            
+            # удаление лишнего в названии района/поселения
+            if 'поселение' in district:
+                district = district.split('поселение')
+            elif 'район' in district:
+                district = district.split('район')
+            
+            # обработка случаев и удаление лишнего
+            if district[0] == '':  # 'поселение Название' или 'район Название'
+                district = district[1].lstrip()
+            elif district[0] != '':  # 'Название поселение' или 'Название район'
+                district = district[0].rstrip()
+
+            print(area)
+            print(district)
+            
+            area_distr = [area, district]
+        else:
+            area_distr = []
         
     return area_distr                        
 
@@ -76,7 +144,7 @@ def getCord(addresses, area=None, district=None): # для мос ру
         geo = {}
 
         if area and district: # если один округ с районом (по адресу находим координаты и компонуем в словарь)
-            url = f'https://geocode-maps.yandex.ru/1.x/?apikey={YANDEX_KEY}&geocode={addresses}&format=json' # используем HTTP Геокодер от Яндекса
+            url = f'https://geocode-maps.yandex.ru/1.x/?apikey={YANDEX_KEY}&geocode={addresses[0]}&format=json' # используем HTTP Геокодер от Яндекса
             response = requests.get(url)
             print(url)
 
@@ -108,7 +176,8 @@ def getCord(addresses, area=None, district=None): # для мос ру
 
                 for i in range(0,4,1):
                     Components = response.json()['response']['GeoObjectCollection']['featureMember'][i]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['Components']
-                    # print(Components)
+                    print(Components)
+                    print(len(Components))
                     # if len(Components) < 6: # в этом инфы нет
                     #     continue
                     if len(Components) == 6 or len(Components) == 5: # если это поселения троицкого или новомосковского округов  and (Components[4]['kind'] == 'area' and Components[4]['name'].startwith('поселение'))
