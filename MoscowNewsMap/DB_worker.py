@@ -5,31 +5,15 @@ import json
 import traceback
 
 
-# find_dotenv()
+
 load_dotenv("./MoscowNewsMap/.env")
-
-# config = dotenv_values(".env")
-# print(config['DB_URL'])
-# или
-# print(os.getenv('DB_URL'))
-
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
 supabase = create_client(url, key)
 
-# print(os.environ.get("SUPABASE_URL"))
-# districts = supabase.table("area").select("*").execute()
 
-# data, count = supabase.table('district').insert({"title": "Проверка"}).execute()
-# data, count = supabase.table('district').delete().eq('title', "Проверка").execute()
-
-# print(districts)
-# news = supabase.table("news").select("*").execute()
-# print(news)
 
 # метод по получению unix даты последней новости ресурса source
-
-
 def checkNews(source):
     try:
         response = (supabase.table("news")

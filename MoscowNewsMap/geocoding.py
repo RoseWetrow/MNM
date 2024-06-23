@@ -68,10 +68,6 @@ YANDEX_KEY = os.environ.get("YANDEX_KEY")
 
 
 def searchAreaAndDistrict(Components):
-    # # получение округа
-    # area = Components[4]
-    # # получение района
-    # district = Components[5]
 
     area_distr = []
 
@@ -103,15 +99,15 @@ def searchAreaAndDistrict(Components):
     
     elif len(Components) == 5: # далее обработка популярных случаев
 
-        if (Components[3]['kind'] == 'area' and Components[4]['name'].startswith('поселение')) or (Components[3]['kind'] == 'province' and Components[4]['name'].startswith('район')) or (Components[3]['kind'] == 'district' and Components[4]['name'].startswith('район')):
+        if ((Components[3]['kind'] == 'area' and Components[4]['name'].startswith('поселение')) or 
+            (Components[3]['kind'] == 'province' and Components[4]['name'].startswith('район')) or 
+            (Components[3]['kind'] == 'district' and Components[4]['name'].startswith('район'))):
             # получение округа
             area = Components[3]['name']
             # получение района/поселения
             district = Components[4]['name']
-            
             # удаление лишнего в названии округа
             area = area.split(' административный округ')[0]
-            
             # удаление лишнего в названии района/поселения
             if 'поселение' in district:
                 district = district.split('поселение')
@@ -180,7 +176,7 @@ def getCord(addresses, area=None, district=None): # для мос ру
                     print(len(Components))
                     # if len(Components) < 6: # в этом инфы нет
                     #     continue
-                    if len(Components) == 6 or len(Components) == 5: # если это поселения троицкого или новомосковского округов  and (Components[4]['kind'] == 'area' and Components[4]['name'].startwith('поселение'))
+                    if len(Components) == 6 or len(Components) == 5: # если это поселения троицкого или новомосковского округов
                     #     pass
                     # elif len(Components) == 6:
                         area_distr = searchAreaAndDistrict(Components)
@@ -242,7 +238,10 @@ def getDistAndArea(coordinates_arr): # для вечерней москвы
 
 def gethAreaCord(area): # для 77.мвд.рф
                                                                                                                                                                                                                                                                                                                                                                     
-    areas_cord = {'Центральный':[37.617644, 55.755819], 'Южный':[37.678065, 55.622014], 'Северный':[37.525774, 55.83839], 'Юго-Западный':[37.576187, 55.662735], 'Северо-Восточный':[37.632565, 55.854875], 'Западный':[37.443533, 55.728003], 'Восточный':[37.775631, 55.787715], 'Северо-Западный':[37.451555, 55.829370], 'Юго-Восточный':[37.754592, 55.692019], 'Зеленоградский':[37.194250, 55.987583], 'Троицкий и Новомосковский':[37.226887, 55.386683]}
+    areas_cord = {'Центральный':[37.617644, 55.755819], 'Южный':[37.678065, 55.622014], 'Северный':[37.525774, 55.83839], 
+                  'Юго-Западный':[37.576187, 55.662735], 'Северо-Восточный':[37.632565, 55.854875], 'Западный':[37.443533, 55.728003], 
+                  'Восточный':[37.775631, 55.787715], 'Северо-Западный':[37.451555, 55.829370], 'Юго-Восточный':[37.754592, 55.692019], 
+                  'Зеленоградский':[37.194250, 55.987583], 'Троицкий и Новомосковский':[37.226887, 55.386683]}
 
     try:
         coordinates = []

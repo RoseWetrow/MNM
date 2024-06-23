@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.typeColors = exports.getNews = void 0;
-function getNews() {
+exports.typeColors = exports.getNewsToday = exports.getNewsWeekly = void 0;
+function getNewsWeekly() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let result = yield fetch('http://127.0.0.1:8000/api/news_weekly');
@@ -23,7 +23,21 @@ function getNews() {
         }
     });
 }
-exports.getNews = getNews;
+exports.getNewsWeekly = getNewsWeekly;
+function getNewsToday() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let result = yield fetch('http://127.0.0.1:8000/api/news_today');
+            let news = yield result.json();
+            console.log('Ответ от API:', news);
+            return news;
+        }
+        catch (error) {
+            console.error('Ошибка при выполнении запроса:', error);
+        }
+    });
+}
+exports.getNewsToday = getNewsToday;
 exports.typeColors = {
     "Благоустройство": "#A6C48A",
     "Выборы": "#FFD700",

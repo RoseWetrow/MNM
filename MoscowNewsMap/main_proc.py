@@ -17,7 +17,7 @@ def start():
         getIndoMVD()
 
         go = False
-        time.sleep(10) # частота выполнения цикла получеиня новостей
+        time.sleep(60) # частота выполнения цикла получеиня новостей
         go = True
 
 start()

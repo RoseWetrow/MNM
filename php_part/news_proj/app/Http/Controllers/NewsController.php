@@ -13,7 +13,7 @@ class NewsController extends Controller
         return response()->json(News::get(), 200);
     }
 
-    // Метод для получения новостей за последнюю неделю
+    // Недельные новости
     public function getNewsWeekly(){
         $oneWeekAgo = Carbon::now()->subWeek()->timestamp;
         
@@ -22,4 +22,12 @@ class NewsController extends Controller
         return response()->json($news, 200);
     }
 
+    // Новости дня
+    public function getNewsToday(){
+        $todayStart = Carbon::today()->timestamp;
+
+        $news = News::where('date_unix', '>=', $todayStart)->get();
+
+        return response()->json($news, 200);
+    }
 }

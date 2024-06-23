@@ -1,15 +1,8 @@
-import type {ZoomRange, LngLatBounds, LngLat, YMapLocationRequest} from '@yandex/ymaps3-types';
-
+import type {ZoomRange, LngLatBounds, LngLat, YMapLocationRequest, BehaviorType} from '@yandex/ymaps3-types';
 
 
 export const ZOOM_RANGE: ZoomRange = {min: 11, max: 19}; 
 export const NEW_LOCATION_CENTER = 0; 
-
-// Определяем границу всей земли
-// const worldBounds: LngLatBounds = [
-//     [-90, -180], // Юго-западный угол мира
-//     [90, 180]    // Северо-восточный угол мира
-// ];
 
 // Bounding box - bottom left and top right corners
 export const RESTRICT_AREA: LngLatBounds = [
@@ -28,3 +21,8 @@ export function boundsToPolygonCoordinates(bounds: LngLatBounds): LngLat[] {
     return [bounds[0], [bounds[1][0], bounds[0][1]], bounds[1], [bounds[0][0], bounds[1][1]]];
 }
 
+// An array with initially enabled map behaviors
+export const INITIALLY_ENABLED_BEHAVIORS: BehaviorType[] = ['drag', 'scrollZoom', 'dblClick'];
+
+// An array of available map behaviors. These are just some of the behaviors, you can see them all in the documentation
+export const AVAILABLE_BEHAVIORS: BehaviorType[] = ['drag', 'scrollZoom', 'dblClick', 'mouseRotate', 'mouseTilt'];

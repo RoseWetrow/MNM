@@ -1,6 +1,17 @@
-export async function getNews() {
+export async function getNewsWeekly() {
     try {
         let result = await fetch('http://127.0.0.1:8000/api/news_weekly');
+        let news = await result.json();
+        console.log('Ответ от API:', news);
+        return news;
+    } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
+    }
+}
+
+export async function getNewsToday() {
+    try {
+        let result = await fetch('http://127.0.0.1:8000/api/news_today');
         let news = await result.json();
         console.log('Ответ от API:', news);
         return news;
@@ -14,7 +25,6 @@ export const typeColors = {
     "Благоустройство": "#A6C48A",
     "Выборы": "#FFD700",
     "Городское управление": "#00BFFF",
-    // решить вопрос с хозяйством
     "Городское хозяйство": "#00BFFF",
     "Здравоохранение": "#FF4500",
     "Культура": "#E6D500",

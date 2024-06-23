@@ -1,15 +1,7 @@
-/* html, body{ 
-width: 100%; 
-height: 100%; 
-margin: 0; 
-padding: 0; 
-font-family: Arial, Helvetica, sans-serif; 
-}  */
-
-
-body{
+/* body{
     height: 100%;
 }
+
 
 html{
 display: flex;
@@ -17,19 +9,19 @@ flex-direction: column;
 height: 100vh;
 }
 
+
 *{
 margin: 0;
 padding: 0;
 box-sizing: border-box;
 font-family: "Montserrat", sans-serif;
-
 }
-
 
 
 main{
     flex: 1 1 0;
 }
+
 
 #map{
 width: 100%; 
@@ -41,24 +33,66 @@ height: 100%;
     min-height: 100%;
     display: flex;
     flex-direction: column;
+} */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+header, footer {
+    flex-shrink: 0; /* Header и Footer не будут уменьшаться */
+}
+
+main {
+    flex: 1; /* Main будет занимать оставшееся пространство */
+    display: flex; /* Чтобы карта занимала 100% пространства main */
+}
+
+#map {
+    flex: 1; /* Карта будет занимать 100% пространства main */
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
 .header{
-    /* background-color: #f5c669; */
     background: rgb(203,62,0);
     background: linear-gradient(90deg, rgb(160, 2, 2) 0%, rgb(255, 92, 92) 50%, rgb(249, 82, 82) 100%);
     height: 80px;
 }
+
 
 .main{
     background-color: rgb(250,247,240);
     flex-grow: 1;
 }
 
+
 .footer{
-    /* background-color: #f5c669; */
     background: rgb(203,62,0);
     background: linear-gradient(90deg,  rgb(249, 82, 82) 0%, rgb(255, 92, 92) 50%, rgb(160, 2, 2) 100%);
-    height: 70px;
+    height: 60px;
+}
+.footer-content{
+    position: relative;
+    text-align: left;
+    font-size: 9px;
+    font-weight: 500;
+    color: #0000004e;
+    margin: 10px;
+    letter-spacing: 2px;
 }
 
 
@@ -76,15 +110,18 @@ height: 100%;
 
 /* Стили для кастомного маркера */
 .marker {
-    /* position: relative; */
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    border: 10px solid #fc0000;
-    background-color: #ffffff;
+    border: 6px solid #ffffff;
     cursor: pointer;
     transform: translate(-50%, -50%);
 }
+.marker:hover{
+    filter: drop-shadow(2px 3px 5px rgba(0, 0, 0, 0.3)); 
+}
+
+
 /* Cтили для окошка с заголовком новости */
 .hint{
     position: absolute;
@@ -96,30 +133,269 @@ height: 100%;
     transform: translate(10%, 1%);
     box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.373);
     z-index: 1;
-    /* opacity: 0; 
-    transition: 1s; 
-    animation: show 1s;
-    animation-fill-mode: forwards;  */
 }
+
 .hint a{
     font-size: 11px;
     font-weight: 500;
     color: #000000;
-    /* margin: 10px; */
 }
 
-/* @keyframes showHint{
+
+.map-popup {
+    display: block;
+    position: absolute;
+    left: -130px; 
+    top: -361px;
+    transform: translate(0px, -6%);
+    width: 260px; 
+    min-height: 150px;
+    background: #fff;
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,.15);
+    border-radius: 8px;
+    opacity: 0; /*Элемент полностью прозрачный (невидимый)*/
+    transition: 1s; /*Скорость перехода состояния элемента*/
+    animation: show 1s; /* Указываем название анимации, её время и количество повторов*/
+    animation-fill-mode: forwards; /* Чтобы элемент оставался в конечном состоянии анимации */
+    animation-delay: 0.15s; /* Задержка перед началом */
+}
+@keyframes show{
     0%{
     opacity:0;
     }
     100% {
     opacity:1;
     }
-} */
+}
 
 
+.map-popup.hidden {
+    display: block;
+    position: absolute;
+    transform: translate(0px, -6%);
+    /* max-width: 336px; */
+    background: #fff;
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,.15);
+    border-radius: 8px;
+    opacity: 1;
+    animation: fadeOut 0.5s; /* Применяем анимацию появления и исчезновения */
+    animation-fill-mode: forwards;
+    overflow: hidden;
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1; /* Промежуточная прозрачность */
+    }
+    100% {
+        opacity: 0; /* Конечная прозрачность */
+    }
+}
 
-.vmmap-popup {
+
+.popup-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    text-align: right;
+    height: 52px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 0;
+    padding: 12px 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    /* display: flex;  */
+    /* flex-direction: row; */
+    /* justify-content: flex-end; */
+}
+.popup-panel a {
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.popup-cover {
+    width: 100%;
+    max-width: 336px;
+}
+.popup-cover a {
+    text-decoration: none;
+    outline: none;
+}
+.popup-cover img {
+    width: 100%;
+    /* height: auto; */
+    max-height: 170px;
+    min-height: 170px;
+    border: 0;
+}
+
+.map-popup h2 {
+    font-weight: 800;
+    font-size: 16px;
+    color: #111010;
+    letter-spacing: 0;
+    line-height: 20px;
+    padding: 16px;
+    width: 100%;
+}
+.map-popup h2 a {
+    color: #111010;
+    transition: all .3s ease 0s;
+    text-decoration: none;
+}
+.map-popup h2 a:hover {
+    color: #730101;
+    transition: all .3s ease 0s;
+    text-decoration: none;
+}
+
+.popup-footer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px 16px;
+}
+.popup-footer .time {
+    font-size: 13px;
+    color: #7e7e7e;
+    letter-spacing: 0;
+    text-align: right;
+    line-height: 20px;
+}
+
+.description-link {
+    font-size: 13px;
+    color: #7e7e7e;
+    letter-spacing: 0;
+    text-align: right;
+    line-height: 20px;
+    cursor: pointer;
+}
+.description-link:hover{
+    color: #111010;
+    transition: all .3s ease 0s;
+    text-decoration: none;
+}
+
+.description-text{
+    font-weight: 500;
+    font-size: 13px;
+    color: #111010;
+    text-align: left;
+    padding: 15px;
+}
+
+.description-text-link{
+    display: block;
+    /* text-decoration: none; */
+    font-weight: 500;
+    font-size: 13px;
+    color: #111010;
+    text-align: left;
+    padding: 0px 15px 15px 15px;
+}
+
+.description-text-link:hover{
+    color: #730101;
+    transition: all .3s ease 0s;
+    text-decoration: none;
+}
+
+.map-popup .arrow {
+    position: absolute;
+    display: block;
+    width: 12px;
+    height: 12px;
+    background-image: url(./img/arrow.svg);
+    background-size: cover;
+    left: 50%;
+    margin-left: -6px;
+    bottom: 0;
+    margin-bottom: -6px;
+}
+
+
+.close {
+    font-weight: 300px;
+    overflow: hidden;
+    border: none;
+    padding: 0;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    background: transparent;
+    color: #ffffff;
+    font: inherit;
+    text-indent: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 1em;
+}
+.close:hover {
+    background: rgba(255, 255, 255, 0.181);
+}
+.close:before, .close:after {
+    position: absolute;
+    top: 15%;
+    left: calc(50% - .0625em);
+    width: .125em;
+    height: 70%;
+    border-radius: .125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: '';
+}
+.close:after {
+    transform: rotate(-45deg);
+}
+
+.back {
+    overflow: hidden;
+    border: none;
+    padding: 0;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    background: transparent;
+    text-indent: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 1em;
+}
+.back:before {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-135deg);
+    width: 0.9em;
+    height: 0.9em;
+    border-top: 2px solid #ffffff;
+    border-right: 2px solid #ffffff;
+}
+.back:hover {
+    background: rgba(255, 255, 255, 0.181);
+}
+
+
+/* Стили для окна в обзоре */
+
+.map-popup-view {
     display: block;
     position: absolute;
     transform: translate(0px, -6%);
@@ -143,7 +419,8 @@ height: 100%;
     }
 }
 
-.vmmap-popup.hidden {
+
+.map-popup-view.hidden {
     display: block;
     position: absolute;
     transform: translate(0px, -6%);
@@ -166,47 +443,7 @@ height: 100%;
 }
 
 
-
-.vmmap-popup .popup-panel {
-    text-align: right;
-    /* background: #009deb; */
-    font-weight: 600;
-    font-size: 14px;
-    color: #fff;
-    letter-spacing: 0;
-    padding: 12px 16px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-}
-.vmmap-popup .popup-panel a {
-    color: #fff;
-    text-decoration: none;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.vmmap-popup .vmpopup-cover {
-    width: 100%;
-    max-width: 336px;
-}
-.vmmap-popup .vmpopup-cover a {
-    text-decoration: none;
-    outline: none;
-}
-.vmmap-popup .vmpopup-cover img {
-    width: 100%;
-    /* height: auto; */
-    max-height: 170px;
-    min-height: 170px;
-    border: 0;
-}
-
-.vmmap-popup h2 {
+.map-popup-view h2 {
     font-weight: 800;
     font-size: 16px;
     color: #111010;
@@ -215,92 +452,92 @@ height: 100%;
     padding: 16px;
     width: 100%;
 }
-.vmmap-popup h2 a {
+.map-popup-view h2 a {
     color: #111010;
     transition: all .3s ease 0s;
     text-decoration: none;
 }
-.vmmap-popup h2 a:hover {
+.map-popup-view h2 a:hover {
     color: #730101;
     transition: all .3s ease 0s;
     text-decoration: none;
 }
 
-.vmmap-popup .vmpopup-footer {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px 16px;
-}
-.vmmap-popup .vmpopup-footer .time {
-    font-size: 13px;
-    color: #7e7e7e;
-    letter-spacing: 0;
-    text-align: right;
-    line-height: 20px;
+/* .next, .previous {
+    overflow: hidden;
+    position: relative;
+    top: 8.2px;
+    padding: 0;
+    width: 2em; height: 2em;
+    background: transparent;
+    text-indent: 100%;
+    border-top: 2px solid #ffffff;
+    border-right: 2px solid #ffffff;
+    width: 0.9em; height: 0.9em;
 }
 
-.vmmap-popup .arrow {
-    position: absolute;
-    display: block;
-    width: 12px;
-    height: 12px;
-    background-image: url(/img/arrow.svg);
-    background-size: cover;
-    left: 50%;
-    margin-left: -6px;
-    bottom: 0;
-    margin-bottom: -6px;
+.next {
+    transform: rotate(45deg);
 }
 
-/* .close{
-    text-decoration: none;
-    display: inline-block;
-    padding: 1px 3px;
-    border-radius: 4px;
-    user-select: none;
-    font-size: 15px;
+.previous {
+    left: -200px;
+    transform: rotate(-135deg);
+}
+
+.next:hover, .previous:hover {
+    background: rgba(255, 255, 255, 0.181);
 } */
 
 
-.close {
-    font-weight: 300px;
+
+
+
+
+.previous, .next {
     overflow: hidden;
-    position: relative;
     border: none;
     padding: 0;
-    width: 2em; height: 2em;
+    width: 2em;
+    height: 2em;
     border-radius: 50%;
     background: transparent;
-    color: #ffffff;
-    font: inherit;
     text-indent: 100%;
     cursor: pointer;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.181);
-    }
-    
-    &:before, &:after {
-        position: absolute;
-        top: 15%; left: calc(50% - .0625em);
-        width: .125em; height: 70%;
-        border-radius: .125em;
-        transform: rotate(45deg);
-        background: currentcolor;
-        content: ''
-      }
-      
-      &:after { transform: rotate(-45deg); }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+  
 }
 
+.previous{
+    left: 1em;
+}
 
+.next{
+    right: 1em;
+}
+.previous:before, .next:before {
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%); /* Коррекция центровки */
+    width: 0.9em;
+    height: 0.9em;
+    border-top: 2px solid #ffffff;
+    border-right: 2px solid #ffffff;
+}
+.previous:before {
+    transform: translate(-50%, -50%) rotate(-135deg)
+}
+.next:before {
+    transform: translate(-50%, -50%) rotate(45deg)
+}
 
-
-
-
-
+.next:hover, .previous:hover {
+    background: rgba(255, 255, 255, 0.181);
+}
 
 

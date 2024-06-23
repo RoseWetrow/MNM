@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import fake_useragent
-from extractors import searchGeo
+# from extractors import searchGeo
 from file_writer import writeFile
 from time_conventer import fromTimeToUnix, fromUnixToTime, fromTimeToUnix_MVD
 from geocoding import getCord, getDistAndArea, gethAreaCord
@@ -30,6 +30,7 @@ header = {'User-Agent': user}
 
 # json method (вечерняя москва)
 def getInfoVM():
+    print('Метод по получению новостей с вечерняя москва')
     news_list = {}
     # URL API
     url = "https://vm.ru/api/map?date_range=3&mcat="
@@ -50,7 +51,6 @@ def getInfoVM():
             if last_date >= date_unix: # если полученная дата новости меньше или равна последней сохраненной - новость старая
                 continue
             
-
             # добавить нормальную дату
             date = fromUnixToTime(date_unix)
 
@@ -63,7 +63,8 @@ def getInfoVM():
                 link = f'https://vm.ru{link}'
             
             print(link)
-
+            
+            img = ''
             # проверка на описание (может быть пустым)
             if news['media'] != []: # в media хранится изображение и описание
                 # достаем фото
@@ -71,12 +72,13 @@ def getInfoVM():
                 img = f'https://vmrucdn.servicecdn.ru/{img}'
 
                 description = news['media'][0]['title']
-                # description = description[:description.find(' Фото:')] if ' Фото:' in description else description # сокращение ненужного
                 description = description.split(' Фото')
                 description = description[0]
             else:
+                img = None
                 description = None
 
+            type = ''
             # Проверяем наличие поля 'placemark' в новости
             if 'placemark' in news and news['placemark']:
                 type = news['placemark']['title']
@@ -114,7 +116,6 @@ def getInfoVM():
             }
         
         if news_list != {}:
-            # writeFile(news_list)
             print('Done')
             insert_into(news_list)
         elif news_list == {}:
@@ -131,75 +132,75 @@ def getInfoVM():
 
 
 # json + address parsing + NLP method (kp.ru)
-def getInfo2():
-    news_list = {}
+# def getInfo2():
+#     news_list = {}
 
-    # URL API
-    url = "https://s02.api.yc.kpcdn.net/content/api/1/pages/get.json?pages.direction=page&pages.target.class=100&pages.target.id=1"
+#     # URL API
+#     url = "https://s02.api.yc.kpcdn.net/content/api/1/pages/get.json?pages.direction=page&pages.target.class=100&pages.target.id=1"
 
-    try:
-        # Запрос JSON данных
-        response = requests.get(url, headers=header)
+#     try:
+#         # Запрос JSON данных
+#         response = requests.get(url, headers=header)
 
-        for i in range(0, 10, 1):
-            news_json = response.json()['childs'][i] # получаем новость
-            print(news_json)
+#         for i in range(0, 10, 1):
+#             news_json = response.json()['childs'][i] # получаем новость
+#             print(news_json)
 
-            type = news_json['@tag'][0] # получаем тип
+#             type = news_json['@tag'][0] # получаем тип
             
-            if type == 'economics' or type == 'interesting': # отметаем новости про экономику и интересные факты
-                continue
+#             if type == 'economics' or type == 'interesting': # отметаем новости про экономику и интересные факты
+#                 continue
 
-            date = news_json['meta'][3]['value'] # получаем дату
-            date_unix = fromTimeToUnix(date) # преобразовываемм дату в unix формат
+#             date = news_json['meta'][3]['value'] # получаем дату
+#             date_unix = fromTimeToUnix(date) # преобразовываемм дату в unix формат
 
-            # добавить проверку на дату
-            # добавить нормальную дату
-            date = fromUnixToTime(date_unix)
+#             # добавить проверку на дату
+#             # добавить нормальную дату
+#             date = fromUnixToTime(date_unix)
 
-            id = news_json['@id']
-            link = f'https://www.msk.kp.ru/online/news/{id}/' 
+#             id = news_json['@id']
+#             link = f'https://www.msk.kp.ru/online/news/{id}/' 
             
-            # парсинг текста по ссылке
-            resPar = requests.get(link).text
-            data = BeautifulSoup(resPar, 'html.parser')
-            news_content = data.find('div', class_="sc-1wayp1z-0 sc-1wayp1z-5 gwmrBl chEeRL")
-            texts = news_content.find_all('p', class_="sc-1wayp1z-16 dqbiXu")
-            content = ''
-            # преобразование html в текст и объединение всех параграфов в одну переменную
-            for text in texts:
-                content += text.text
+#             # парсинг текста по ссылке
+#             resPar = requests.get(link).text
+#             data = BeautifulSoup(resPar, 'html.parser')
+#             news_content = data.find('div', class_="sc-1wayp1z-0 sc-1wayp1z-5 gwmrBl chEeRL")
+#             texts = news_content.find_all('p', class_="sc-1wayp1z-16 dqbiXu")
+#             content = ''
+#             # преобразование html в текст и объединение всех параграфов в одну переменную
+#             for text in texts:
+#                 content += text.text
 
-            # сокращение ненужного
-            result_content = content[:content.find('Ранее KP.RU')] if 'Ранее KP.RU' in content else content
+#             # сокращение ненужного
+#             result_content = content[:content.find('Ранее KP.RU')] if 'Ранее KP.RU' in content else content
 
-            geo = searchGeo(result_content) #  получаем адрес из текста
+#             geo = searchGeo(result_content) #  получаем адрес из текста
 
-            if geo == '' or geo == 'Москва, ': # если адрес обнаружить неудалось
-                continue
+#             if geo == '' or geo == 'Москва, ': # если адрес обнаружить неудалось
+#                 continue
 
-            title = news_json['ru']['title']
-            description = news_json['ru']['description']
-            type = news_json['@tag'][0] 
-            img = news_json['image']['url']
-            img = f'https://s16.stc.yc.kpcdn.net{img}'
+#             title = news_json['ru']['title']
+#             description = news_json['ru']['description']
+#             type = news_json['@tag'][0] 
+#             img = news_json['image']['url']
+#             img = f'https://s16.stc.yc.kpcdn.net{img}'
 
-            news_list[date_unix] = {
-            'title': title,
-            'description': description,
-            'date_unix': date_unix,
-            'date': date,
-            'link': link,
-            'type': type,
-            'source': 'kp.ru',
-            'img': img,
-            'geo': geo
-            }
+#             news_list[date_unix] = {
+#             'title': title,
+#             'description': description,
+#             'date_unix': date_unix,
+#             'date': date,
+#             'link': link,
+#             'type': type,
+#             'source': 'kp.ru',
+#             'img': img,
+#             'geo': geo
+#             }
 
 
-    except Exception as e:
-        print(f'Ошибка при выполнении метода для kp.ru\n{e}\n')
-        traceback.print_exc()
+#     except Exception as e:
+#         print(f'Ошибка при выполнении метода для kp.ru\n{e}\n')
+#         traceback.print_exc()
 
 
         
@@ -208,6 +209,7 @@ def getInfo2():
 
 # json + address parsing method (mos.ru) (only rayon)
 def getInfoMOSRU():
+    print('Метод по получению новостей с мос.ру')
 
     url = 'https://www.mos.ru/api/newsfeed/v4/frontend/json/ru/articles?fields=id,title,date_timestamp,image,kind,territory_district_id,sphere,entity_id,entity_suffix&filter=%7B%22has_district%22:1,%22status%22:%5B%22public%22,%22public_oiv%22%5D%7D&page=1&per-page=15'
     
@@ -323,6 +325,7 @@ def getInfoMOSRU():
 
 
 def getIndoMVD():
+    print('Метод по получению новостей с мвд.рф')
 
     link = 'https://77.xn--b1aew.xn--p1ai/news'
 
@@ -422,7 +425,6 @@ def getIndoMVD():
             }
 
         if news_list != {}:
-            # writeFile(news_list)
             print('Done')
             insert_into(news_list)
         elif news_list == {}:

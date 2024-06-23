@@ -4,24 +4,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <script crossorigin src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-  <script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+  <!-- <script crossorigin src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="main.css">
   <!-- To make the map appear, you must add your apikey -->
   <script src="https://api-maps.yandex.ru/v3/?apikey=17d0db87-101e-4ffd-9e99-9034cf9a99f3&lang=ru_RU" type="text/javascript"></script>
-  <script> var exports = {}; </script>
+  <!-- <script> var exports = {}; </script> -->
   <!-- <script type="module" src="./js_files/index.js"></script>
   <script type="module" src="./js_files/common.js"></script> -->
 
-  <script type="module" src="./js_files/bundle.js"></script>
-
-
-  <!-- <script data-plugins="transform-modules-umd" data-presets="typescript" type="text/babel" src="./common.ts"></script>
-  <script data-plugins="transform-modules-umd" data-presets="typescript" type="text/babel" src="./index.ts"></script> -->
-  <!-- <script data-plugins="transform-modules-umd" data-presets="typescript" type="text/babel" src="./api_work.ts"></script> -->
+  <script src="./js_files/bundle.js"></script>
 
   <!-- prettier-ignore -->
 </head>
@@ -37,15 +32,15 @@
         <div id="map"></div>
     </main>
 
-    <footer class="footer"></footer>
-
-</div>
-
-<footer></footer>
-
+    <footer class="footer">
+      <div class="footer-content">
+        <div>Московская Новостная Карта</div>
+        <div>2024</div>
+        <div>Повышев Ярослав Дмитриевич</div>
+      </div>
+    </footer>
+  </div>
 </body>
-
 </html>
-
 
 
